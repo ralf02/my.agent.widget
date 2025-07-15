@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { MessageCircle, X, Send, Minimize2 } from 'lucide-react';
+import { MessageCircle, X, Send } from 'lucide-react';
 import { ChatbotAPI } from '../utils/api';
 import { defaultConfig } from '../config/config';
 import './ChatbotWidget.css';
@@ -94,10 +94,6 @@ const ChatbotWidget = ({ config: userConfig = {} }) => {
     setIsMinimized(false);
   };
 
-  const minimizeChat = () => {
-    setIsMinimized(true);
-  };
-
   const formatTime = (timestamp) => {
     return timestamp.toLocaleTimeString('es-ES', {
       hour: '2-digit',
@@ -136,13 +132,6 @@ const ChatbotWidget = ({ config: userConfig = {} }) => {
           >
             <h3 className="chatbot-title">{config.widgetTitle}</h3>
             <div className="chatbot-controls">
-              <button
-                onClick={minimizeChat}
-                className="chatbot-control-btn"
-                aria-label="Minimizar"
-              >
-                <Minimize2 size={16} />
-              </button>
               <button
                 onClick={toggleChat}
                 className="chatbot-control-btn"

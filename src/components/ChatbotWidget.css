@@ -117,7 +117,7 @@
 }
 
 .message.user .message-content {
-  background-color: #3b82f6;
+  background-color: #484a4e;
   color: white;
 }
 
@@ -188,7 +188,7 @@
 }
 
 .message-input:focus {
-  border-color: #3b82f6;
+  border-color: #d1d5db;
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
