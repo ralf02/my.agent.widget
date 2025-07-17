@@ -6,7 +6,7 @@ import { ChatStorage } from '../utils/storage';
 import './ChatbotWidget.css';
 
 const ChatbotWidget = ({ config: userConfig = {} }) => {
-  const config = { ...defaultConfig, ...userConfig };
+  const config = React.useMemo(() => ({ ...defaultConfig, ...userConfig }), [userConfig]);
   const [isOpen, setIsOpen] = useState(false);
   const [isMinimized, setIsMinimized] = useState(false);
   const [messages, setMessages] = useState([
