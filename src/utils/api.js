@@ -57,10 +57,6 @@ export class ChatbotAPI {
         return 'Tiempo de espera agotado. Intenta nuevamente.';
       }
 
-      if (error.name === 'AbortError') {
-        return 'Tiempo de espera agotado. Intenta nuevamente.';
-      }
-
       return this.config.offlineMessage;
     }
   }
