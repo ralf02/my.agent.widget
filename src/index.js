@@ -1,16 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import reportWebVitals from './reportWebVitals';
 import ChatbotWidget from './components/ChatbotWidget';
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-  <React.StrictMode>
-    <ChatbotWidget />
-  </React.StrictMode>
-);
+// Función para inicializar el widget
+window.ChatbotWidget = function(container, config) {
+  const root = ReactDOM.createRoot(container);
+  root.render(<ChatbotWidget config={config} />);
+};
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+// Si se está ejecutando en modo normal (con root)
+if (document.getElementById('root')) {
+  const root = ReactDOM.createRoot(document.getElementById('root'));
+  root.render(<ChatbotWidget />);
+}

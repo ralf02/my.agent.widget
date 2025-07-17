@@ -1,43 +1,97 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
   <head>
     <meta charset="utf-8" />
-    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#000000" />
-    <meta
-      name="description"
-      content="Web site created using create-react-app"
-    />
-    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
-    <!--
-      manifest.json provides metadata used when your web app is installed on a
-      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
-    -->
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    <!--
-      Notice the use of %PUBLIC_URL% in the tags above.
-      It will be replaced with the URL of the `public` folder during the build.
-      Only files inside the `public` folder can be referenced from the HTML.
-
-      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
-      work correctly both with client-side routing and a non-root public URL.
-      Learn how to configure a non-root public URL by running `npm run build`.
-    -->
-    <title>Rafiko responde</title>
+    <title>Widget de Chat Rafiko</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 20px;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        background-color: #f5f5f5;
+      }
+      .demo-container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+      .demo-title {
+        text-align: center;
+        margin-bottom: 30px;
+        color: #333;
+      }
+      .demo-code {
+        background: #f8f9fa;
+        padding: 15px;
+        border-radius: 4px;
+        margin: 20px 0;
+      }
+      .demo-widget {
+        margin-top: 30px;
+      }
+    </style>
   </head>
   <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div>
-    <!--
-      This HTML file is a template.
-      If you open it directly in the browser, you will see an empty page.
+    <div class="demo-container">
+      <h1 class="demo-title">Demostración del Widget de Chat Rafiko</h1>
+      <p>Este es un ejemplo de cómo integrar el widget de chat en tu sitio web.</p>
+      <div class="demo-code">
+        <h3>Código de integración:</h3>
+        <div class="demo-code">
+          <h3>Uso como componente React:</h3>
+          <pre>
+            <code>
+              import { ChatbotWidget } from 'my.agent.widget';
 
-      You can add webfonts, meta tags, or analytics to this file.
-      The build step will place the bundled scripts into the <body> tag.
+              // En tu componente React:
+              &lt;ChatbotWidget 
+                config={{
+                  widgetTitle: "Rafiko responde",
+                  welcomeMessage: "¡Hola soy Rafiko! ¿En qué puedo ayudarte?",
+                  position: "bottom-right",
+                  primaryColor: "#000000ff",
+                  secondaryColor: "#EFF6FF"
+                }}
+              /&gt;
+            </code>
+          </pre>
+        </div>
+        <div class="demo-code">
+          <h3>Uso como widget embebido:</h3>
+          <pre>
+            <code>
+              &lt;!-- 1. Incluir el CSS --&gt;
+              &lt;link rel="stylesheet" href="https://ruta-a-tu-widget/build/static/css/main.css">
 
-      To begin the development, run `npm start` or `yarn start`.
-      To create a production bundle, use `npm run build` or `yarn build`.
-    -->
+              &lt;!-- 2. Incluir el JavaScript --&gt;
+              &lt;script src="https://ruta-a-tu-widget/build/static/js/main.js"&gt;&lt;/script&gt;
+
+              &lt;!-- 3. Insertar el widget --&gt;
+              &lt;div id="chat-widget"&gt;&lt;/div&gt;
+
+              &lt;!-- 4. Inicializar el widget --&gt;
+              &lt;script&gt;
+                window.onload = function() {
+                  new ChatbotWidget(document.getElementById('chat-widget'), {
+                    widgetTitle: "Rafiko responde",
+                    welcomeMessage: "¡Hola soy Rafiko! ¿En qué puedo ayudarte?",
+                    position: "bottom-right",
+                    primaryColor: "#000000ff",
+                    secondaryColor: "#EFF6FF"
+                  });
+                };
+              &lt;/script&gt;
+            </code>
+          </pre>
+        </div>
+      </div>
+      <!-- Widget en acción-->
+      <div id="root"></div>      
+    </div>
+    <script src="%PUBLIC_URL%/static/js/main.js"></script>
   </body>
 </html>

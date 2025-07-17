@@ -1,7 +1,8 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { MessageCircle, X, Send } from 'lucide-react';
 import { ChatbotAPI } from '../utils/api';
 import { defaultConfig } from '../config/config';
+import { ChatStorage } from '../utils/storage';
 import './ChatbotWidget.css';
 
 const ChatbotWidget = ({ config: userConfig = {} }) => {
@@ -21,9 +22,56 @@ const ChatbotWidget = ({ config: userConfig = {} }) => {
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef(null);
   const apiRef = useRef(null);
+  const inputRef = useRef(null);
+
+  useEffect(() => {
+    const savedState = ChatStorage.getState();
+    if (savedState) {
+      setMessages(savedState.messages);
+      setIsOpen(savedState.isOpen);
+      setIsMinimized(savedState.isMinimized);
+      setInputText(savedState.inputText);
+    }
+  }, []);
+
+  useEffect(() => {
+    const state = {
+      messages,
+      isOpen,
+      isMinimized,
+      inputText
+    };
+    ChatStorage.saveState(state);
+  }, [messages, isOpen, isMinimized, inputText]);
+
+  useEffect(() => {
+    const handleUrlChange = () => {
+      const savedState = ChatStorage.getState();
+      if (savedState) {
+        setMessages(savedState.messages);
+        setIsOpen(savedState.isOpen);
+        setIsMinimized(savedState.isMinimized);
+        setInputText(savedState.inputText);
+      }
+    };
+
+    window.addEventListener('popstate', handleUrlChange);
+    return () => window.removeEventListener('popstate', handleUrlChange);
+  }, []);
+
+  const focusInput = useCallback(() => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, []);
 
   useEffect(() => {
     apiRef.current = new ChatbotAPI(config);
+    // Restaurar la sesión si existe
+    const sessionId = ChatStorage.getSession();
+    if (sessionId) {
+      apiRef.current.sessionId = sessionId;
+    }
   }, [config]);
 
   useEffect(() => {
@@ -36,19 +84,16 @@ const ChatbotWidget = ({ config: userConfig = {} }) => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
-  const handleSendMessage = async (e) => {
-    e?.preventDefault();
-    if (!inputText.trim() || isLoading) return;
-
+  const handleSendMessage = async () => {
     const userMessage = {
       id: Date.now(),
-      text: inputText.trim(),
+      text: inputText,
       sender: 'user',
       timestamp: new Date()
     };
 
     setMessages(prev => [...prev, userMessage]);
-    const messageToSend = inputText.trim();
+    const messageToSend = inputText;
     setInputText('');
     setIsTyping(true);
     setIsLoading(true);
@@ -78,7 +123,9 @@ const ChatbotWidget = ({ config: userConfig = {} }) => {
       console.error('Error handling message:', error);
       const errorMessage = {
         id: Date.now() + 1,
-        text: config.offlineMessage,
+        text: error.name === 'AbortError' 
+          ? 'Tiempo de espera agotado. El servidor está tardando en responder.'
+          : config.offlineMessage,
         sender: 'bot',
         timestamp: new Date()
       };
@@ -89,13 +136,21 @@ const ChatbotWidget = ({ config: userConfig = {} }) => {
     }
   };
 
+  useEffect(() => {
+    if (inputText === '') {
+      focusInput();
+    }
+  }, [messages, inputText, focusInput]);
+
   const toggleChat = () => {
     setIsOpen(!isOpen);
     setIsMinimized(false);
   };
 
   const formatTime = (timestamp) => {
-    return timestamp.toLocaleTimeString('es-ES', {
+    // Asegurarse de que timestamp sea una instancia de Date
+    const date = timestamp instanceof Date ? timestamp : new Date(timestamp);
+    return date.toLocaleTimeString('es-ES', {
       hour: '2-digit',
       minute: '2-digit'
     });
@@ -114,7 +169,7 @@ const ChatbotWidget = ({ config: userConfig = {} }) => {
       {!isOpen && (
         <button
           onClick={toggleChat}
-          className="chatbot-trigger"
+          className="chatbot-trigger orbit-pulse"
           style={{ backgroundColor: config.primaryColor }}
           aria-label="Abrir chat"
         >
@@ -184,10 +239,11 @@ const ChatbotWidget = ({ config: userConfig = {} }) => {
                     type="text"
                     value={inputText}
                     onChange={(e) => setInputText(e.target.value)}
-                    onKeyPress={handleKeyPress}
+                    onKeyDown={handleKeyPress}
                     placeholder={config.placeholderText}
                     disabled={isLoading}
                     className="message-input"
+                    ref={inputRef}
                   />
                   <button
                     onClick={handleSendMessage}
