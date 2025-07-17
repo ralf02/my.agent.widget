@@ -12,19 +12,19 @@ async function renameFiles() {
         const cssFiles = await fs.readdir(cssPath);
         const jsFiles = await fs.readdir(jsPath);
 
-        // Renombrar archivos CSS
+        // Crear copias de archivos CSS
         const cssFile = cssFiles.find(file => file.startsWith('main.') && file.endsWith('.css'));
         if (cssFile) {
-            await fs.rename(
+            await fs.copyFile(
                 path.join(cssPath, cssFile),
                 path.join(cssPath, 'main.css')
             );
         }
 
-        // Renombrar archivos JS
+        // Crear copias de archivos JS
         const jsFile = jsFiles.find(file => file.startsWith('main.') && file.endsWith('.js'));
         if (jsFile) {
-            await fs.rename(
+            await fs.copyFile(
                 path.join(jsPath, jsFile),
                 path.join(jsPath, 'main.js')
             );
