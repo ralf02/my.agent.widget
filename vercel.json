@@ -8,6 +8,34 @@
       }
     }
   ],
+  "headers": [
+    {
+      "source": "/build/static/js/main.js",
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
+        },
+        {
+          "key": "Access-Control-Allow-Methods",
+          "value": "GET"
+        }
+      ]
+    },
+    {
+      "source": "/build/static/css/main.css",
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
+        },
+        {
+          "key": "Access-Control-Allow-Methods",
+          "value": "GET"
+        }
+      ]
+    }
+  ],
   "routes": [
     {
       "src": "/(.*)",
