@@ -59,10 +59,10 @@ Para integrar el widget en cualquier sitio web (HTML):
 
 ```html
 <!-- 1. Incluir el CSS -->
-<link rel="stylesheet" href="https://my-agent-widget.vercel.app/build/static/css/main.css">
+<link rel="stylesheet" href="https://my-agent-widget.vercel.app/static/css/main.css">
 
 <!-- 2. Incluir el JavaScript -->
-<script src="https://my-agent-widget.vercel.app/build/static/js/main.js"></script>
+<script src="https://my-agent-widget.vercel.app/static/js/main.js"></script>
 
 <!-- 3. Insertar el widget -->
 <div id="chat-widget"></div>
@@ -101,4 +101,4 @@ Ejecuta las pruebas del proyecto.
 - `secondaryColor`: Color secundario del widget
 - `maxMessages`: Número máximo de mensajes
 - `typingDelay`: Tiempo de espera simulado para la respuesta
-- `apiTimeout`: Tiempo máximo de espera para la API 
+- `apiTimeout`: Tiempo máximo de espera para la API
