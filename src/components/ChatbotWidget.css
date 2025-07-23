@@ -9,6 +9,12 @@
   right: 20px;
 }
 
+.chatbot-widget.middle-right {
+  top: 50%;
+  right: 20px;
+  transform: translateY(-50%);
+}
+
 .chatbot-widget.bottom-left {
   bottom: 20px;
   left: 20px;
