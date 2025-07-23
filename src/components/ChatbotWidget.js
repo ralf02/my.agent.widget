@@ -3,6 +3,7 @@ import { MessageCircle, X, Send } from 'lucide-react';
 import { ChatbotAPI } from '../utils/api';
 import { defaultConfig } from '../config/config';
 import { ChatStorage } from '../utils/storage';
+import { formatMessage } from '../utils/formatMessage';
 import './ChatbotWidget.css';
 
 const ChatbotWidget = ({ config: userConfig = {} }) => {
@@ -208,7 +209,7 @@ const ChatbotWidget = ({ config: userConfig = {} }) => {
                     className={`message ${message.sender === 'user' ? 'user' : 'bot'}`}
                   >
                     <div className="message-content">
-                      <p>{message.text}</p>
+                      <p>{formatMessage(message.text)}</p>
                       <span className="message-time">
                         {formatTime(message.timestamp)}
                       </span>
