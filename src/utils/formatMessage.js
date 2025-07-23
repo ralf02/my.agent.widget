@@ -166,15 +166,16 @@ export const formatMessage = (text) => {
         // First, check if the whole line is just an image URL
         const trimmedLine = line.trim();
         if (isImageUrl(trimmedLine)) {
+          const imageUrl = trimmedLine;
           return (
             <div key={`img-${i}`} className="message-image-container">
               <img 
-                src={trimmedLine} 
+                src={imageUrl} 
                 alt="Imagen del chat" 
                 className="message-image"
                 onError={(e) => {
                   // Fallback to link if image fails to load
-                  e.target.outerHTML = `<a href="${trimmedLine}" target="_blank" rel="noopener noreferrer">${trimmedLine}</a>`;
+                  e.target.outerHTML = `<a href="${imageUrl}" target="_blank" rel="noopener noreferrer">${imageUrl}</a>`;
                 }}
               />
             </div>
@@ -205,15 +206,17 @@ export const formatMessage = (text) => {
             
             // Add the image
             const imgUrl = imgMatch[0];
+            const imageKey = `img-${imgMatch.index}`;
             result.push(
-              <div key={`img-${imgMatch.index}`} className="message-image-container">
+              <div key={imageKey} className="message-image-container">
                 <img 
                   src={imgUrl}
                   alt="Imagen del chat" 
                   className="message-image"
                   onError={(e) => {
+                    const failedImageUrl = e.target.src;
                     // Fallback to link if image fails to load
-                    e.target.outerHTML = `<a href="${imgUrl}" target="_blank" rel="noopener noreferrer">${imgUrl}</a>`;
+                    e.target.outerHTML = `<a href="${failedImageUrl}" target="_blank" rel="noopener noreferrer">${failedImageUrl}</a>`;
                   }}
                 />
               </div>
@@ -233,24 +236,30 @@ export const formatMessage = (text) => {
         
         // Process markdown links first
         while ((match = linkRegex.exec(line)) !== null) {
-          // Add text before the match
+          // Add text before the link
           if (match.index > lastIndex) {
-            const beforeText = line.substring(lastIndex, match.index);
-            parts.push(...processText(beforeText));
+            parts.push(line.substring(lastIndex, match.index));
           }
           
+          // Capture match values in local variables
+          const linkText = match[1];
+          const linkUrl = match[2];
+          const matchIndex = match.index;
+          
           // Check if the link is an image
-          if (isImageUrl(match[2])) {
-            const imageUrl = match[2];
-            const altText = match[1] || 'Imagen del chat';
+          if (isImageUrl(linkUrl)) {
+            const imageUrl = linkUrl;
+            const altText = linkText || 'Imagen del chat';
             
             parts.push(
-              <div key={`img-${i}-${match.index}`} className="message-image-container">
+              <div key={`img-${i}-${matchIndex}`} className="message-image-container">
                 <img 
                   src={imageUrl} 
                   alt={altText}
                   className="message-image"
                   onError={(e) => {
+                    const imageUrl = e.target.src;
+                    const altText = e.target.alt;
                     // Fallback to link if image fails to load
                     e.target.outerHTML = `<a href="${imageUrl}" target="_blank" rel="noopener noreferrer">${altText || imageUrl}</a>`;
                   }}
@@ -261,13 +270,13 @@ export const formatMessage = (text) => {
             // Add regular link
             parts.push(
               <a 
-                key={`link-${i}-${match.index}`} 
-                href={match[2]} 
+                key={`link-${i}-${matchIndex}`} 
+                href={linkUrl} 
                 target="_blank" 
                 rel="noopener noreferrer"
                 style={{ color: '#007bff', textDecoration: 'underline' }}
               >
-                {match[1] || match[2]}
+                {linkText || linkUrl}
               </a>
             );
           }
