@@ -241,15 +241,18 @@ export const formatMessage = (text) => {
           
           // Check if the link is an image
           if (isImageUrl(match[2])) {
+            const imageUrl = match[2];
+            const altText = match[1] || 'Imagen del chat';
+            
             parts.push(
               <div key={`img-${i}-${match.index}`} className="message-image-container">
                 <img 
-                  src={match[2]} 
-                  alt={match[1] || 'Imagen del chat'} 
+                  src={imageUrl} 
+                  alt={altText}
                   className="message-image"
                   onError={(e) => {
                     // Fallback to link if image fails to load
-                    e.target.outerHTML = `<a href="${match[2]}" target="_blank" rel="noopener noreferrer">${match[1] || match[2]}</a>`;
+                    e.target.outerHTML = `<a href="${imageUrl}" target="_blank" rel="noopener noreferrer">${altText || imageUrl}</a>`;
                   }}
                 />
               </div>
